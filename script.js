@@ -4,252 +4,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // 1. Current Year
-  const yearEl = document.getElementById('current-year');
-  if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  // 2. Navbar Styling & Scroll Reveal
-  const navbar = document.getElementById('navbar');
-  const reveals = document.querySelectorAll('.reveal');
-
-  const checkScroll = () => {
-    // Navbar
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
-
-    // Reveals
-    const viewBottom = window.scrollY + window.innerHeight;
-    reveals.forEach(el => {
-      const elTop = el.offsetTop;
-      if (elTop < viewBottom - 100) {
-        el.classList.add('visible');
-      }
-    });
-  };
-
-  window.addEventListener('scroll', checkScroll);
-  // Optional: Trigger once on load
-  setTimeout(checkScroll, 100);
-
-  // 3. Mobile Navigation
-  const btnHam = document.getElementById('hamburger');
-  const mobileNav = document.getElementById('mobile-nav');
-  const btnClose = document.getElementById('mobile-nav-close');
-  const navLinks = mobileNav.querySelectorAll('a');
-
-  const toggleNav = () => {
-    mobileNav.classList.toggle('open');
-    document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
-  };
-
-  if (btnHam) btnHam.addEventListener('click', toggleNav);
-  if (btnClose) btnClose.addEventListener('click', toggleNav);
-  navLinks.forEach(link => link.addEventListener('click', toggleNav));
-
-
-  // ==========================================================
-  // 4. BEFORE / AFTER SLIDER
-  // ==========================================================
-  const slider = document.getElementById('comparison-slider');
-  if (slider) {
-    const handle = document.getElementById('slider-handle');
-    const beforeWrap = document.getElementById('before-wrap');
-    const beforeImg = document.getElementById('before-img');
-
-    // Maintain inner image size
-    const updateSize = () => {
-      beforeImg.style.width = `${slider.offsetWidth}px`;
-    };
-    window.addEventListener('resize', updateSize);
-    updateSize();
-
-    let isSliding = false;
-    const startSlide = (e) => { isSliding = true; e.preventDefault(); };
-    const stopSlide = () => { isSliding = false; };
-
-    const moveSlide = (e) => {
-      if (!isSliding) return;
-      const rect = slider.getBoundingClientRect();
-      const x = (e.type.includes('mouse') ? e.pageX : e.touches[0].pageX) - rect.left - window.scrollX;
-      let pos = (x / rect.width) * 100;
-      if (pos < 0) pos = 0;
-      if (pos > 100) pos = 100;
-
-      handle.style.left = `${pos}%`;
-      beforeWrap.style.width = `${pos}%`;
-    };
-
-    handle.addEventListener('mousedown', startSlide);
-    window.addEventListener('mouseup', stopSlide);
-    window.addEventListener('mousemove', moveSlide);
-
-    handle.addEventListener('touchstart', startSlide, { passive: false });
-    window.addEventListener('touchend', stopSlide);
-    window.addEventListener('touchmove', moveSlide, { passive: false });
-  }
-
-
-  // ==========================================================
-  // 4b. DEEP CLEANING CHECKLIST TABS
-  // ==========================================================
-  const tabBtns = document.querySelectorAll('.tab-btn');
-  const tabPanes = document.querySelectorAll('.tab-pane');
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetId = btn.getAttribute('data-target');
-
-      tabBtns.forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
-      });
-      tabPanes.forEach(p => p.classList.remove('active'));
-
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-      const targetPane = document.getElementById(targetId);
-      if (targetPane) targetPane.classList.add('active');
-    });
-  });
-
-
-  // ==========================================================
-  // 5. PRICING CALCULATOR
-  // ==========================================================
-  const radioInputs = document.querySelectorAll('input[name="service-type"]');
-  const checkboxInputs = document.querySelectorAll('.extra-item input[type="checkbox"]');
-
-  // Elements
-  const elBedCount = document.getElementById('bed-count');
-  const elBathCount = document.getElementById('bath-count');
-  const bdBaseName = document.getElementById('bd-base-name');
-  const bdRoomsName = document.getElementById('bd-rooms-name');
-  const bdExtrasRow = document.getElementById('bd-extras-row');
-  const bdExtrasList = document.getElementById('bd-extras-list');
-  const bdFreqName = document.getElementById('bd-freq-name');
-  const freqSelect = document.getElementById('freq-select');
-
-  // Counts
-  let countBeds = 1;
-  let countBaths = 1;
-
-  // Render Summary
-  const updateSummary = () => {
-    // 1. Service Type
-    const checkedService = document.querySelector('input[name="service-type"]:checked');
-    if (checkedService) {
-      const label = checkedService.nextElementSibling.querySelector('.radio-name').textContent;
-      if (bdBaseName) bdBaseName.textContent = label;
-    }
-
-    // 2. Rooms
-    if (bdRoomsName) {
-      bdRoomsName.textContent = `${countBeds} Bed(s), ${countBaths} Bath(s)`;
-    }
-
-    // 3. Extras
-    let selectedExtras = [];
-    checkboxInputs.forEach(cb => {
-      if (cb.checked) {
-        const labelText = cb.nextElementSibling.querySelector('span[data-i18n]').textContent;
-        selectedExtras.push(labelText);
-      }
-    });
-
-    if (bdExtrasRow && bdExtrasList) {
-      if (selectedExtras.length > 0) {
-        bdExtrasRow.style.display = 'flex';
-        bdExtrasList.innerHTML = selectedExtras.map(ext => `<li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; vertical-align:text-bottom;"><polyline points="20 6 9 17 4 12"></polyline></svg>${ext}</li>`).join('');
-      } else {
-        bdExtrasRow.style.display = 'none';
-        bdExtrasList.innerHTML = '';
-      }
-    }
-
-    // 4. Frequency
-    if (bdFreqName && freqSelect) {
-      bdFreqName.textContent = freqSelect.options[freqSelect.selectedIndex].text;
-    }
-
-    // Update Language if changed
-    const currentLang = localStorage.getItem('jgcc_lang') || 'en';
-    if (checkedService) {
-      const key = checkedService.nextElementSibling.querySelector('.radio-name').getAttribute('data-i18n');
-      if (translations[currentLang] && translations[currentLang][key]) {
-        if (bdBaseName) bdBaseName.textContent = translations[currentLang][key];
-      }
-    }
-  };
-
-  // Bind Frequency
-  if (freqSelect) freqSelect.addEventListener('change', updateSummary);
-
-  // Bind Buttons
-  document.getElementById('bed-minus').addEventListener('click', () => { if (countBeds > 1) { countBeds--; elBedCount.textContent = countBeds; updateSummary(); } });
-  document.getElementById('bed-plus').addEventListener('click', () => { if (countBeds < 10) { countBeds++; elBedCount.textContent = countBeds; updateSummary(); } });
-  document.getElementById('bath-minus').addEventListener('click', () => { if (countBaths > 1) { countBaths--; elBathCount.textContent = countBaths; updateSummary(); } });
-  document.getElementById('bath-plus').addEventListener('click', () => { if (countBaths < 10) { countBaths++; elBathCount.textContent = countBaths; updateSummary(); } });
-
-  // Bind Radios & Checkboxes
-  radioInputs.forEach(el => el.addEventListener('change', updateSummary));
-  checkboxInputs.forEach(el => el.addEventListener('change', updateSummary));
-
-  // Initial Init
-  updateSummary();
-
-
-  // ==========================================================
-  // 6. CONTACT FORM SUBMISSION (Formspree)
-  // ==========================================================
-  const contactForm = document.getElementById('contact-form-el');
-  if (contactForm) {
-    contactForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.innerHTML;
-      const successBox = document.getElementById('success-box');
-
-      // Simple validation
-      const name = document.getElementById('cf-name').value.trim();
-      const email = document.getElementById('cf-email').value.trim();
-      const address = document.getElementById('cf-address').value.trim();
-      const msg = document.getElementById('cf-message').value.trim();
-
-      if (!name || !email || !address || !msg) {
-        alert("Please fill in Name, Email, Address, and Message.");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = 'Sending...';
-
-      try {
-        const response = await fetch(contactForm.action, {
-          method: 'POST',
-          body: new FormData(contactForm),
-          headers: { 'Accept': 'application/json' }
-        });
-
-        if (response.ok) {
-          // Success
-          contactForm.style.display = 'none';
-          successBox.style.display = 'block';
-        } else {
-          throw new Error('Submission failed');
-        }
-      } catch (err) {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = originalText;
-        alert("Sorry, an error occurred while sending. Please try again or email us directly at contact@mgcleansolutions.com.");
-      }
-    });
-  }
-
-
-  // ==========================================================
   // 7. BILINGUAL SUPPORT (Static i18n)
   // ==========================================================
   const translations = {
@@ -664,6 +418,254 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+
+  // 1. Current Year
+  const yearEl = document.getElementById('current-year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+  // 2. Navbar Styling & Scroll Reveal
+  const navbar = document.getElementById('navbar');
+  const reveals = document.querySelectorAll('.reveal');
+
+  const checkScroll = () => {
+    // Navbar
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
+
+    // Reveals
+    const viewBottom = window.scrollY + window.innerHeight;
+    reveals.forEach(el => {
+      const elTop = el.offsetTop;
+      if (elTop < viewBottom - 100) {
+        el.classList.add('visible');
+      }
+    });
+  };
+
+  window.addEventListener('scroll', checkScroll);
+  // Optional: Trigger once on load
+  setTimeout(checkScroll, 100);
+
+  // 3. Mobile Navigation
+  const btnHam = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  const btnClose = document.getElementById('mobile-nav-close');
+  const navLinks = mobileNav.querySelectorAll('a');
+
+  const toggleNav = () => {
+    mobileNav.classList.toggle('open');
+    document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+  };
+
+  if (btnHam) btnHam.addEventListener('click', toggleNav);
+  if (btnClose) btnClose.addEventListener('click', toggleNav);
+  navLinks.forEach(link => link.addEventListener('click', toggleNav));
+
+
+  // ==========================================================
+  // 4. BEFORE / AFTER SLIDER
+  // ==========================================================
+  const slider = document.getElementById('comparison-slider');
+  if (slider) {
+    const handle = document.getElementById('slider-handle');
+    const beforeWrap = document.getElementById('before-wrap');
+    const beforeImg = document.getElementById('before-img');
+
+    // Maintain inner image size
+    const updateSize = () => {
+      beforeImg.style.width = `${slider.offsetWidth}px`;
+    };
+    window.addEventListener('resize', updateSize);
+    updateSize();
+
+    let isSliding = false;
+    const startSlide = (e) => { isSliding = true; e.preventDefault(); };
+    const stopSlide = () => { isSliding = false; };
+
+    const moveSlide = (e) => {
+      if (!isSliding) return;
+      const rect = slider.getBoundingClientRect();
+      const x = (e.type.includes('mouse') ? e.pageX : e.touches[0].pageX) - rect.left - window.scrollX;
+      let pos = (x / rect.width) * 100;
+      if (pos < 0) pos = 0;
+      if (pos > 100) pos = 100;
+
+      handle.style.left = `${pos}%`;
+      beforeWrap.style.width = `${pos}%`;
+    };
+
+    handle.addEventListener('mousedown', startSlide);
+    window.addEventListener('mouseup', stopSlide);
+    window.addEventListener('mousemove', moveSlide);
+
+    handle.addEventListener('touchstart', startSlide, { passive: false });
+    window.addEventListener('touchend', stopSlide);
+    window.addEventListener('touchmove', moveSlide, { passive: false });
+  }
+
+
+  // ==========================================================
+  // 4b. DEEP CLEANING CHECKLIST TABS
+  // ==========================================================
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanes = document.querySelectorAll('.tab-pane');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const targetId = btn.getAttribute('data-target');
+
+      tabBtns.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      tabPanes.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      const targetPane = document.getElementById(targetId);
+      if (targetPane) targetPane.classList.add('active');
+    });
+  });
+
+
+  // ==========================================================
+  // 5. PRICING CALCULATOR
+  // ==========================================================
+  const radioInputs = document.querySelectorAll('input[name="service-type"]');
+  const checkboxInputs = document.querySelectorAll('.extra-item input[type="checkbox"]');
+
+  // Elements
+  const elBedCount = document.getElementById('bed-count');
+  const elBathCount = document.getElementById('bath-count');
+  const bdBaseName = document.getElementById('bd-base-name');
+  const bdRoomsName = document.getElementById('bd-rooms-name');
+  const bdExtrasRow = document.getElementById('bd-extras-row');
+  const bdExtrasList = document.getElementById('bd-extras-list');
+  const bdFreqName = document.getElementById('bd-freq-name');
+  const freqSelect = document.getElementById('freq-select');
+
+  // Counts
+  let countBeds = 1;
+  let countBaths = 1;
+
+  // Render Summary
+  const updateSummary = () => {
+    // 1. Service Type
+    const checkedService = document.querySelector('input[name="service-type"]:checked');
+    if (checkedService) {
+      const label = checkedService.nextElementSibling.querySelector('.radio-name').textContent;
+      if (bdBaseName) bdBaseName.textContent = label;
+    }
+
+    // 2. Rooms
+    if (bdRoomsName) {
+      bdRoomsName.textContent = `${countBeds} Bed(s), ${countBaths} Bath(s)`;
+    }
+
+    // 3. Extras
+    let selectedExtras = [];
+    checkboxInputs.forEach(cb => {
+      if (cb.checked) {
+        const labelText = cb.nextElementSibling.querySelector('span[data-i18n]').textContent;
+        selectedExtras.push(labelText);
+      }
+    });
+
+    if (bdExtrasRow && bdExtrasList) {
+      if (selectedExtras.length > 0) {
+        bdExtrasRow.style.display = 'flex';
+        bdExtrasList.innerHTML = selectedExtras.map(ext => `<li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; vertical-align:text-bottom;"><polyline points="20 6 9 17 4 12"></polyline></svg>${ext}</li>`).join('');
+      } else {
+        bdExtrasRow.style.display = 'none';
+        bdExtrasList.innerHTML = '';
+      }
+    }
+
+    // 4. Frequency
+    if (bdFreqName && freqSelect) {
+      bdFreqName.textContent = freqSelect.options[freqSelect.selectedIndex].text;
+    }
+
+    // Update Language if changed
+    const currentLang = localStorage.getItem('jgcc_lang') || 'en';
+    if (checkedService) {
+      const key = checkedService.nextElementSibling.querySelector('.radio-name').getAttribute('data-i18n');
+      if (translations[currentLang] && translations[currentLang][key]) {
+        if (bdBaseName) bdBaseName.textContent = translations[currentLang][key];
+      }
+    }
+  };
+
+  // Bind Frequency
+  if (freqSelect) freqSelect.addEventListener('change', updateSummary);
+
+  // Bind Buttons
+  document.getElementById('bed-minus').addEventListener('click', () => { if (countBeds > 1) { countBeds--; elBedCount.textContent = countBeds; updateSummary(); } });
+  document.getElementById('bed-plus').addEventListener('click', () => { if (countBeds < 10) { countBeds++; elBedCount.textContent = countBeds; updateSummary(); } });
+  document.getElementById('bath-minus').addEventListener('click', () => { if (countBaths > 1) { countBaths--; elBathCount.textContent = countBaths; updateSummary(); } });
+  document.getElementById('bath-plus').addEventListener('click', () => { if (countBaths < 10) { countBaths++; elBathCount.textContent = countBaths; updateSummary(); } });
+
+  // Bind Radios & Checkboxes
+  radioInputs.forEach(el => el.addEventListener('change', updateSummary));
+  checkboxInputs.forEach(el => el.addEventListener('change', updateSummary));
+
+  // Initial Init
+  updateSummary();
+
+
+  // ==========================================================
+  // 6. CONTACT FORM SUBMISSION (Formspree)
+  // ==========================================================
+  const contactForm = document.getElementById('contact-form-el');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.innerHTML;
+      const successBox = document.getElementById('success-box');
+
+      // Simple validation
+      const name = document.getElementById('cf-name').value.trim();
+      const email = document.getElementById('cf-email').value.trim();
+      const address = document.getElementById('cf-address').value.trim();
+      const msg = document.getElementById('cf-message').value.trim();
+
+      if (!name || !email || !address || !msg) {
+        alert("Please fill in Name, Email, Address, and Message.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Sending...';
+
+      try {
+        const response = await fetch(contactForm.action, {
+          method: 'POST',
+          body: new FormData(contactForm),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          // Success
+          contactForm.style.display = 'none';
+          successBox.style.display = 'block';
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        alert("Sorry, an error occurred while sending. Please try again or email us directly at contact@mgcleansolutions.com.");
+      }
+    });
+  }
+
+
+  // ==========================================================
+  
   let currentLang = localStorage.getItem('jgcc_lang') || 'en';
 
   const applyLang = (lang) => {
