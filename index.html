@@ -307,6 +307,9 @@
               <h3 data-i18n="service1_name">General Clean</h3>
               <p data-i18n="service1_desc">Regular maintenance clean to keep your home spotless. Perfect for ongoing
                 freshness and hygiene.</p>
+              <div class="service-price">
+                <span data-i18n="from">From</span> $150 <span data-i18n="service1_price_suffix">~ / 1 Bed, 1 Bath</span>
+              </div>
 
               <details class="service-details-accordion">
                 <summary><span data-i18n="view_details">View Details</span></summary>
@@ -381,6 +384,9 @@
               <h3 data-i18n="service3_name">Spring / Deep Cleaning</h3>
               <p data-i18n="service3_desc">Thorough top-to-bottom clean. Perfect for seasonal cleaning or special
                 occasions.</p>
+              <div class="service-price">
+                <span data-i18n="from">From</span> $250
+              </div>
 
               <details class="service-details-accordion">
                 <summary><span data-i18n="view_details">View Details</span></summary>
@@ -476,6 +482,9 @@
               <h3 data-i18n="service2_name">Bond Cleaning</h3>
               <p data-i18n="service2_desc">Professional-grade bond clean with our 100% Bond Back Guarantee. We handle
                 everything for a stress-free move-out.</p>
+              <div class="service-price">
+                <span data-i18n="from">From</span> $350 <span data-i18n="service2_price_suffix">~ / 1 Bed, 1 Bath</span>
+              </div>
 
               <details class="service-details-accordion">
                 <summary><span data-i18n="view_details">View Details</span></summary>
@@ -511,6 +520,9 @@
               <h3 data-i18n="service4_name">Airbnb / Holiday Home</h3>
               <p data-i18n="service4_desc">Fast, reliable turnover cleaning for short-stay properties. Trusted by Gold
                 Coast hosts to maintain 5-star reviews.</p>
+              <div class="service-price">
+                <span data-i18n="contact_for_quote">Contact for Quote</span>
+              </div>
 
               <details class="service-details-accordion">
                 <summary><span data-i18n="view_details">View Details</span></summary>
@@ -956,7 +968,11 @@
 
           <!-- Form -->
           <div class="contact-form reveal reveal-delay-1">
-            <form id="contact-form-el" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
+            <form id="contact-form-el" action="https://formsubmit.co/masanobu.890328@gmail.com" method="POST"
+              novalidate>
+
+              <!-- Disables captcha for smoother UX -->
+              <input type="hidden" name="_captcha" value="false">
 
               <!-- Honeypot -->
               <div class="hidden" style="position:absolute; left:-9999px;" aria-hidden="true">
