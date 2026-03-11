@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Themes Mockup | Japanese GC Cleaning</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="style.css" />
+
+    <style>
+        /* Floating Theme Switcher */
+        .theme-switcher-ui {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            z-index: 9999;
+            border: 1px solid #efefef;
+        }
+
+        .theme-switcher-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            margin-right: 10px;
+        }
+
+        .theme-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-btn.active {
+            border-color: #333;
+            box-shadow: 0 0 0 3px #fff inset;
+        }
+
+        .theme-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 15px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a2535;
+            color: #fff;
+            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .theme-btn::before {
+            content: '';
+            position: absolute;
+            bottom: calc(100% + 7px);
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: #1a2535 transparent transparent transparent;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.2s;
+        }
+
+        .theme-btn:hover::after,
+        .theme-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* Transition for root variables */
+        html {
+            transition: background-color 0.5s ease;
+        }
+
+        body * {
+            transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ============================================================
+     HERO
+     ============================================================ -->
+    <main>
+        <section class="hero" id="home" aria-label="Hero">
+            <div class="hero-overlay" aria-hidden="true"
+                style="z-index:1; background: linear-gradient(135deg, rgba(var(--color-primary-rgb), 0.92) 0%, rgba(var(--color-primary-rgb), 0.82) 50%, rgba(var(--color-primary-rgb), 0.45) 100%);">
+            </div>
+            <div class="container">
+                <div class="hero-content reveal visible" style="opacity:1; transform:translateY(0)">
+                    <div class="hero-badge" aria-label="Service area">
+                        <span data-i18n="hero_badge" style="color:var(--color-accent);">Theme Mockup Page</span>
+                    </div>
+
+                    <h1 class="hero-title">
+                        <span>Color Palette</span><br>
+                        <span class="accent" style="color:var(--color-accent);">Live Preview</span>
+                    </h1>
+
+                    <p class="hero-desc">
+                        Use the floating switcher below to compare the 5 different color concepts requested. These
+                        changes apply to the entire layout's components instantly.
+                    </p>
+
+                    <div class="hero-ctas">
+                        <a href="#about" class="btn btn-primary">
+                            <span>View Sections</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+     ABOUT / VALUES
+     ============================================================ -->
+        <section class="about-section" id="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-image-wrap reveal visible" style="opacity:1; transform:none;">
+                        <!-- Dummy block instead of image -->
+                        <div
+                            style="width:100%; height:100%; background:var(--color-primary-light); display:flex; align-items:center; justify-content:center; color:#fff; font-size:2rem; font-weight:bold;">
+                            Image Area</div>
+                        <div class="about-image-badge" style="background:var(--color-primary);">
+                            <span style="color:var(--color-accent);">100%</span>
+                            <span>Quality Assured</span>
+                        </div>
+                    </div>
+                    <div class="about-text">
+                        <div>
+                            <p class="section-label">Color Themes in Action</p>
+                            <h2 class="section-title">Clean, Professional, Trusted</h2>
+                            <p class="section-subtitle">Notice how the Primary Color defines the text headings, while
+                                the Accent Color calls attention to important elements.</p>
+                        </div>
+                        <ul class="values-list">
+                            <li class="value-item">
+                                <div class="value-icon">
+                                    <span style="font-weight:900;">1</span>
+                                </div>
+                                <div class="value-text">
+                                    <h4>Component Backgrounds</h4>
+                                    <p>Check the background of this card, matching the surface color.</p>
+                                </div>
+                            </li>
+                            <li class="value-item">
+                                <div class="value-icon">
+                                    <span style="font-weight:900;">2</span>
+                                </div>
+                                <div class="value-text">
+                                    <h4>Icon Displays</h4>
+                                    <p>The numbers on the left are housed in the light accent color.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================
+     SERVICES
+     ============================================================ -->
+        <section class="services-section">
+            <div class="container">
+                <div class="text-center">
+                    <p class="section-label">Mockup Section</p>
+                    <h2 class="section-title">Sample Cards</h2>
+                </div>
+                <div class="services-grid">
+
+                    <article class="service-card">
+                        <div class="service-card-image"
+                            style="background:var(--color-border); height:200px; display:flex; align-items:center; justify-content:center; color:var(--color-text-light);">
+                            Image</div>
+                        <div class="service-card-body">
+                            <div class="service-card-icon"
+                                style="background:var(--color-accent-light); color:var(--color-accent); width:50px; height:50px; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; font-weight:bold;">
+                                A</div>
+                            <h3>Service Example</h3>
+                            <p>This is a standard card component to demonstrate text and background contrast on the
+                                surface.</p>
+                            <div class="service-price">
+                                <span style="color:var(--color-accent); font-weight:bold; font-size:1.2rem;">Mockup
+                                    Card</span>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="service-card">
+                        <div class="service-card-image"
+                            style="background:var(--color-primary-light); height:200px; display:flex; align-items:center; justify-content:center; color:#fff;">
+                            Image</div>
+                        <div class="service-card-body">
+                            <div class="service-card-icon"
+                                style="background:var(--color-accent-light); color:var(--color-accent); width:50px; height:50px; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; font-weight:bold;">
+                                B</div>
+                            <h3>Another Layout</h3>
+                            <p>Observe how different combinations affect the emotional and visual response of the
+                                visitor.</p>
+                            <div class="service-price">
+                                <button class="btn btn-primary"
+                                    style="width:100%; justify-content:center; margin-top:1rem;">Sample Button</button>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============================================================
+     THEME SWITCHER UI
+     ============================================================ -->
+    <div class="theme-switcher-ui">
+        <div class="theme-switcher-title">Themes:</div>
+
+        <!-- 1. Light Blue -->
+        <button class="theme-btn" data-tooltip="1. 水色系 (Light Blue / Sky Blue)"
+            style="background: linear-gradient(135deg, #0ea5e9 50%, #38bdf8 50%);" onclick="setTheme({
+        primary: '#0369a1', primaryDark: '#075985', primaryLight: '#38bdf8', primaryRgb: '3, 105, 161',
+        accent: '#0ea5e9', accentDark: '#0284c7', accentLight: '#e0f2fe', accentRgb: '14, 165, 233',
+        bg: '#f0f9ff', surface: '#ffffff'
+      }, this)"></button>
+
+        <!-- 2. Light Blue & Green -->
+        <button class="theme-btn" data-tooltip="2. 水色系 × 緑系 (Cyan & Emerald)"
+            style="background: linear-gradient(135deg, #06b6d4 50%, #10b981 50%);" onclick="setTheme({
+        primary: '#0891b2', primaryDark: '#164e63', primaryLight: '#22d3ee', primaryRgb: '8, 145, 178',
+        accent: '#10b981', accentDark: '#047857', accentLight: '#d1fae5', accentRgb: '16, 185, 129',
+        bg: '#f0fdfa', surface: '#ffffff'
+      }, this)"></button>
+
+        <!-- 3. Current Spec -->
+        <button class="theme-btn active" data-tooltip="3. 現在の仕様 (Navy & Leaf Green)"
+            style="background: linear-gradient(135deg, #1a3a5c 50%, #3a9e6a 50%);" onclick="setTheme({
+        primary: '#1a3a5c', primaryDark: '#102640', primaryLight: '#2a5f96', primaryRgb: '26, 58, 92',
+        accent: '#3a9e6a', accentDark: '#2c7a52', accentLight: '#e8f7ef', accentRgb: '58, 158, 106',
+        bg: '#f8fafc', surface: '#ffffff'
+      }, this)"></button>
+
+        <!-- 4. Neat & Clean 1 -->
+        <button class="theme-btn" data-tooltip="4. 清楚・クリーン (Slate Gray & Soft Sage)"
+            style="background: linear-gradient(135deg, #475569 50%, #519872 50%);" onclick="setTheme({
+        primary: '#334155', primaryDark: '#1e293b', primaryLight: '#64748b', primaryRgb: '51, 65, 85',
+        accent: '#519872', accentDark: '#3b7054', accentLight: '#eef6f2', accentRgb: '81, 152, 114',
+        bg: '#f8faf9', surface: '#ffffff'
+      }, this)"></button>
+
+        <!-- 5. Neat & Clean 2 -->
+        <button class="theme-btn" data-tooltip="5. 透明感・ピュア (Ice Blue & Platinum)"
+            style="background: linear-gradient(135deg, #2c3e50 50%, #7fb3d5 50%);" onclick="setTheme({
+        primary: '#2c3e50', primaryDark: '#1a252f', primaryLight: '#34495e', primaryRgb: '44, 62, 80',
+        accent: '#7fb3d5', accentDark: '#5499c7', accentLight: '#eaf2f8', accentRgb: '127, 179, 213',
+        bg: '#f8f9fa', surface: '#ffffff'
+      }, this)"></button>
+    </div>
+
+    <script>
+        function setTheme(colors, btnElement) {
+            const root = document.documentElement;
+            root.style.setProperty('--color-primary', colors.primary);
+            root.style.setProperty('--color-primary-dark', colors.primaryDark);
+            root.style.setProperty('--color-primary-light', colors.primaryLight);
+            root.style.setProperty('--color-primary-rgb', colors.primaryRgb);
+
+            root.style.setProperty('--color-accent', colors.accent);
+            root.style.setProperty('--color-accent-dark', colors.accentDark);
+            root.style.setProperty('--color-accent-light', colors.accentLight);
+            root.style.setProperty('--color-accent-rgb', colors.accentRgb);
+
+            root.style.setProperty('--color-bg', colors.bg);
+            root.style.setProperty('--color-surface', colors.surface);
+
+            // Hero overlay needs manual RGB update because inline style string interpolation doesn't dynamically apply if inherited directly on the element sometimes, though CSS vars do work.
+            const overlay = document.querySelector('.hero-overlay');
+            if (overlay) {
+                overlay.style.background = `linear-gradient(135deg, rgba(${colors.primaryRgb}, 0.92) 0%, rgba(${colors.primaryRgb}, 0.82) 50%, rgba(${colors.primaryRgb}, 0.45) 100%)`;
+            }
+
+            // Update active button state
+            document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

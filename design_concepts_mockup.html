@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning HP - Design Concepts</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* General Fonts */
+            --font-main: 'Montserrat', 'Noto Sans JP', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-main);
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .presentation-header {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #fff;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .presentation-header h1 {
+            color: #2C3E50;
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .presentation-header p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .concept-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .concept-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 4rem;
+        }
+
+        .concept-info {
+            padding: 2rem 3rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .concept-info h2 {
+            color: #2C3E50;
+            margin-top: 0;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .concept-desc {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .palette {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .swatch-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Mockup Window UI */
+        .mockup-window {
+            background: #e0e0e0;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            gap: 6px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot.red {
+            background: #ff5f56;
+        }
+
+        .dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .dot.green {
+            background: #27c93f;
+        }
+
+        /* General Mockup Styles */
+        .mockup-canvas {
+            position: relative;
+            width: 100%;
+            height: 550px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mock-header {
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .mock-logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mock-logo svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .mock-nav {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .mock-hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 4rem;
+            position: relative;
+        }
+
+        .mock-hero-content {
+            z-index: 2;
+            max-width: 550px;
+        }
+
+        .mock-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .mock-h1 {
+            font-size: 3.2rem;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .mock-p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .mock-btn-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .mock-btn {
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* CONCEPT 1: Light Blue / Sky Blue */
+        .c1-bg {
+            background-color: #f0f9ff;
+        }
+
+        .c1-main {
+            color: #0369a1;
+        }
+
+        .c1-accent {
+            color: #0ea5e9;
+        }
+
+        .canvas-1 {
+            background-color: #f0f9ff;
+            color: #334155;
+        }
+
+        .canvas-1 .mock-logo,
+        .canvas-1 .mock-nav div {
+            color: #0369a1;
+        }
+
+        .canvas-1 .mock-hero-image {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 55%;
+            background: linear-gradient(to right, #f0f9ff 0%, transparent 30%), url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .canvas-1 .mock-badge {
+            background: #e0f2fe;
+            color: #0284c7;
+        }
+
+        .canvas-1 .mock-h1 {
+            color: #0369a1;
+        }
+
+        .canvas-1 .mock-btn {
+            background-color: #0ea5e9;
+            color: #fff;
+            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3);
+        }
+
+        /* CONCEPT 2: Cyan & Emerald */
+        .c2-bg {
+            background-color: #f0fdfa;
+        }
+
+        .c2-main {
+            color: #0891b2;
+        }
+
+        .c2-accent {
+            color: #10b981;
+        }
+
+        .canvas-2 {
+            background-color: #f0fdfa;
+            color: #0f172a;
+        }
+
+        .canvas-2 .mock-logo {
+            color: #0891b2;
+        }
+
+        .canvas-2 .mock-nav div {
+            color: #0f172a;
+        }
+
+        .canvas-2 .mock-hero-image {
+            position: absolute;
+            right: 4rem;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 350px;
+            width: 350px;
+            border-radius: 50%;
+            background: url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            border: 8px solid #fff;
+            box-shadow: 0 20px 40px rgba(8, 145, 178, 0.15);
+        }
+
+        .canvas-2 .mock-badge {
+            background: #d1fae5;
+            color: #047857;
+        }
+
+        .canvas-2 .mock-h1 {
+            color: #0f172a;
+        }
+
+        .canvas-2 .mock-h1 span {
+            color: #0891b2;
+        }
+
+        .canvas-2 .mock-btn {
+            background-color: #10b981;
+            color: #fff;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        /* CONCEPT 3: Current Spec (Navy & Leaf Green) */
+        .c3-bg {
+            background-color: #1a3a5c;
+        }
+
+        .c3-main {
+            color: #1a3a5c;
+        }
+
+        .c3-accent {
+            color: #3a9e6a;
+        }
+
+        .canvas-3 {
+            background-color: #1a3a5c;
+            color: #fff;
+        }
+
+        .canvas-3 .mock-hero-image {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(26, 58, 92, 0.95), rgba(26, 58, 92, 0.7)), url('https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+
+        .canvas-3 .mock-logo,
+        .canvas-3 .mock-nav div {
+            color: #fff;
+        }
+
+        .canvas-3 .mock-badge {
+            background: rgba(58, 158, 106, 0.2);
+            border: 1px solid rgba(58, 158, 106, 0.5);
+            color: #6ee7b0;
+        }
+
+        .canvas-3 .mock-h1 {
+            color: #fff;
+        }
+
+        .canvas-3 .mock-h1 span {
+            color: #6ee7b0;
+            /* Light green accent */
+        }
+
+        .canvas-3 .mock-btn {
+            background-color: #3a9e6a;
+            color: #fff;
+        }
+
+        /* CONCEPT 4: Slate Gray & Soft Sage */
+        .c4-bg {
+            background-color: #f8faf9;
+        }
+
+        .c4-main {
+            color: #334155;
+        }
+
+        .c4-accent {
+            color: #519872;
+        }
+
+        .canvas-4 {
+            background-color: #f8faf9;
+            color: #475569;
+        }
+
+        .canvas-4 .mock-logo,
+        .canvas-4 .mock-nav div {
+            color: #334155;
+        }
+
+        .canvas-4 .mock-hero-image {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            height: 90%;
+            width: 45%;
+            background: url('https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center left;
+            border-radius: 40px 0 0 0;
+        }
+
+        .canvas-4 .mock-badge {
+            background: #eef6f2;
+            color: #3b7054;
+        }
+
+        .canvas-4 .mock-h1 {
+            color: #334155;
+        }
+
+        .canvas-4 .mock-btn {
+            background-color: #519872;
+            color: #fff;
+        }
+
+        /* CONCEPT 5: Ice Blue & Platinum */
+        .c5-bg {
+            background-color: #f8f9fa;
+        }
+
+        .c5-main {
+            color: #2c3e50;
+        }
+
+        .c5-accent {
+            color: #7fb3d5;
+        }
+
+        .canvas-5 {
+            background-color: #f8f9fa;
+            color: #5a6c7d;
+        }
+
+        .canvas-5 .mock-logo {
+            color: #2c3e50;
+        }
+
+        .canvas-5 .mock-nav div {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .canvas-5 .mock-hero-content {
+            text-align: center;
+            margin: 0 auto;
+            max-width: 650px;
+        }
+
+        .canvas-5 .mock-hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(rgba(248, 249, 250, 0.85), rgba(248, 249, 250, 0.95)), url('https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=1000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
+
+        .canvas-5 .mock-badge {
+            background: #eaf2f8;
+            color: #5499c7;
+        }
+
+        .canvas-5 .mock-h1 {
+            color: #2c3e50;
+        }
+
+        .canvas-5 .mock-btn-group {
+            justify-content: center;
+        }
+
+        .canvas-5 .mock-btn {
+            background-color: #2c3e50;
+            color: #fff;
+            border-radius: 2px;
+        }
+
+        .canvas-5 .mock-btn-outline {
+            background-color: transparent;
+            color: #2c3e50;
+            border: 2px solid #2c3e50;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="presentation-header">
+        <h1>Cleaning HP - Design Concepts</h1>
+        <p>ご指定いただいた5つのカラーパターンを基に、デザイン全体がどのように変化するかを把握するためのモックアップシートです。同じ内容でも、配色レイアウトによって印象が大きく変わります。</p>
+    </header>
+
+    <div class="concept-container">
+
+        <!-- CONCEPT 1 -->
+        <div class="concept-card">
+            <div class="concept-info">
+                <h2>1. 水色系 (Light Blue / Sky Blue)</h2>
+                <p class="concept-desc">
+                    <strong>コンセプト:</strong> 爽やかで清涼感があり、パブリックな清掃サービスとして信頼感を感じさせる明るい配色です。清掃後の「ピカピカ感」を直感的に連想させます。
+                </p>
+                <div class="palette">
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #f0f9ff;"></div>Bg (Light)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #0369a1;"></div>Primary (Navy Blue)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #0ea5e9;"></div>Accent (Sky Blue)
+                    </div>
+                </div>
+            </div>
+            <div class="mockup-window">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="mockup-canvas canvas-1">
+                <div class="mock-hero-image"></div>
+                <div class="mock-header">
+                    <div class="mock-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        Japanese GC Cleaning
+                    </div>
+                    <div class="mock-nav">
+                        <div>Services</div>
+                        <div>Results</div>
+                        <div>Estimate</div>
+                    </div>
+                </div>
+                <div class="mock-hero">
+                    <div class="mock-hero-content">
+                        <div class="mock-badge">Quality Assured</div>
+                        <h1 class="mock-h1">Japanese Standard<br>Quality Cleaning</h1>
+                        <p class="mock-p">Insured, Police Checked, and 100% Satisfaction Guaranteed. Attention to
+                            detail. The Japanese way.</p>
+                        <div class="mock-btn-group">
+                            <a href="#" class="mock-btn">Calculate Your Price</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCEPT 2 -->
+        <div class="concept-card">
+            <div class="concept-info">
+                <h2>2. 水色系 × 緑系 (Cyan & Emerald)</h2>
+                <p class="concept-desc">
+                    <strong>コンセプト:</strong> 水色の持つ「清潔感」と、緑の持つ「エコ・安心感・自然環境への配慮」を組み合わせた、非常にクリーンでモダンな配色です。
+                </p>
+                <div class="palette">
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #f0fdfa;"></div>Bg (Mint)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #0891b2;"></div>Primary (Cyan)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #10b981;"></div>Accent (Emerald)
+                    </div>
+                </div>
+            </div>
+            <div class="mockup-window">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="mockup-canvas canvas-2">
+                <div class="mock-hero-image"></div>
+                <div class="mock-header">
+                    <div class="mock-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        Japanese GC Cleaning
+                    </div>
+                    <div class="mock-nav">
+                        <div>Services</div>
+                        <div>Results</div>
+                        <div>Estimate</div>
+                    </div>
+                </div>
+                <div class="mock-hero">
+                    <div class="mock-hero-content">
+                        <div class="mock-badge">Gold Coast Wide</div>
+                        <h1 class="mock-h1">Japanese Standard<br><span>Quality Cleaning</span></h1>
+                        <p class="mock-p">Insured, Police Checked, and 100% Satisfaction Guaranteed. Attention to
+                            detail. The Japanese way.</p>
+                        <div class="mock-btn-group">
+                            <a href="#" class="mock-btn">Calculate Your Price</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCEPT 3 -->
+        <div class="concept-card">
+            <div class="concept-info">
+                <h2>3. 現在の仕様 (Navy & Leaf Green)</h2>
+                <p class="concept-desc">
+                    <strong>コンセプト:</strong> 今お使いの深いネイビーとリーフグリーンの組み合わせ。信頼性と堅実さが最も高く、B2B（民泊オーナーや不動産会社）に対しても説得力を持たせる配色です。
+                </p>
+                <div class="palette">
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #1a3a5c;"></div>Primary (Navy)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #3a9e6a;"></div>Accent (Leaf)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #f8fafc;"></div>Bg (Surface)
+                    </div>
+                </div>
+            </div>
+            <div class="mockup-window">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="mockup-canvas canvas-3">
+                <div class="mock-hero-image"></div>
+                <div class="mock-header">
+                    <div class="mock-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        Japanese GC Cleaning
+                    </div>
+                    <div class="mock-nav">
+                        <div>Services</div>
+                        <div>Results</div>
+                        <div>Estimate</div>
+                    </div>
+                </div>
+                <div class="mock-hero">
+                    <div class="mock-hero-content">
+                        <div class="mock-badge">Gold Coast Wide — Japanese Standard</div>
+                        <h1 class="mock-h1">Japanese Standard<br><span>Quality Cleaning</span></h1>
+                        <p class="mock-p">Insured, Police Checked, and 100% Satisfaction Guaranteed. Attention to
+                            detail. The Japanese way.</p>
+                        <div class="mock-btn-group">
+                            <a href="#" class="mock-btn">Calculate Your Price</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCEPT 4 -->
+        <div class="concept-card">
+            <div class="concept-info">
+                <h2>4. 清楚・クリーン (Slate Gray & Soft Sage) ★おすすめ1</h2>
+                <p class="concept-desc">
+                    <strong>コンセプト:</strong> 少し彩度を落としたスレートグレーに、優しいセージグリーンを合わせた配色。コントラストが強すぎず、非常に洗練された「上質かつ清楚」なモダンデザインです。
+                </p>
+                <div class="palette">
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #f8faf9;"></div>Bg (Off White)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #334155;"></div>Primary (Slate Gray)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #519872;"></div>Accent (Sage)
+                    </div>
+                </div>
+            </div>
+            <div class="mockup-window">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="mockup-canvas canvas-4">
+                <div class="mock-hero-image"></div>
+                <div class="mock-header">
+                    <div class="mock-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        Japanese GC Cleaning
+                    </div>
+                    <div class="mock-nav">
+                        <div>Services</div>
+                        <div>Results</div>
+                        <div>Estimate</div>
+                    </div>
+                </div>
+                <div class="mock-hero">
+                    <div class="mock-hero-content">
+                        <div class="mock-badge">High Quality Service</div>
+                        <h1 class="mock-h1">Exceptional Care<br>for Your Home</h1>
+                        <p class="mock-p">Insured, Police Checked, and 100% Satisfaction Guaranteed. Attention to
+                            detail. The Japanese way.</p>
+                        <div class="mock-btn-group">
+                            <a href="#" class="mock-btn">Calculate Your Price</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCEPT 5 -->
+        <div class="concept-card">
+            <div class="concept-info">
+                <h2>5. 透明感・ピュア (Ice Blue & Platinum) ★おすすめ2</h2>
+                <p class="concept-desc">
+                    <strong>コンセプト:</strong> 深みのあるブルーグレーに、透明感のあるアイスブルーをアクセントにした配色。「ホテルのような最高級の清潔感」を演出したい場合に最適です。
+                </p>
+                <div class="palette">
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #f8f9fa;"></div>Bg (Platinum)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #2c3e50;"></div>Primary (Deep Blue)
+                    </div>
+                    <div class="color-swatch">
+                        <div class="swatch-box" style="background: #7fb3d5;"></div>Accent (Ice Blue)
+                    </div>
+                </div>
+            </div>
+            <div class="mockup-window">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+            </div>
+            <div class="mockup-canvas canvas-5">
+                <div class="mock-hero-image"></div>
+                <div class="mock-header">
+                    <div class="mock-logo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                            <polyline points="9 22 9 12 15 12 15 22" />
+                        </svg>
+                        Japanese GC Cleaning
+                    </div>
+                    <div class="mock-nav">
+                        <div>Services</div>
+                        <div>Results</div>
+                        <div>Estimate</div>
+                    </div>
+                </div>
+                <div class="mock-hero">
+                    <div class="mock-hero-content">
+                        <div class="mock-badge">Premium Cleaning</div>
+                        <h1 class="mock-h1">The Purest Clean.</h1>
+                        <p class="mock-p">Insured, Police Checked, and 100% Satisfaction Guaranteed.<br>Attention to
+                            detail. The Japanese way.</p>
+                        <div class="mock-btn-group">
+                            <a href="#" class="mock-btn">Get a Quote</a>
+                            <a href="#" class="mock-btn mock-btn-outline">Our Services</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
