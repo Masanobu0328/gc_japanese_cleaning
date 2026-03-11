@@ -552,6 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Render Summary
   const updateSummary = () => {
+    const currentLang = localStorage.getItem('jgcc_lang') || 'en';
+
     // 1. Service Type
     const checkedService = document.querySelector('input[name="service-type"]:checked');
     if (checkedService) {
@@ -561,7 +563,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Rooms
     if (bdRoomsName) {
-      bdRoomsName.textContent = `${countBeds} Bed(s), ${countBaths} Bath(s)`;
+      if (currentLang === 'ja') {
+        bdRoomsName.textContent = `${countBeds} ベッド, ${countBaths} バス(トイレ)`;
+      } else {
+        bdRoomsName.textContent = `${countBeds} Bed(s), ${countBaths} Bath(s)`;
+      }
     }
 
     // 3. Extras
@@ -589,7 +595,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Update Language if changed
-    const currentLang = localStorage.getItem('jgcc_lang') || 'en';
     if (checkedService) {
       const key = checkedService.nextElementSibling.querySelector('.radio-name').getAttribute('data-i18n');
       if (translations[currentLang] && translations[currentLang][key]) {
@@ -665,7 +670,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================
-  
+
   let currentLang = localStorage.getItem('jgcc_lang') || 'en';
 
   const applyLang = (lang) => {
@@ -691,6 +696,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.documentElement.lang = lang;
+
+    // Dynamic Form Subject
+    const subjectInput = document.querySelector('input[name="_subject"]');
+    if (subjectInput) {
+      subjectInput.value = lang === 'ja'
+        ? '【お見積り依頼】MG clean Solutions ホームページより'
+        : 'New Quote Request from MG clean Solutions Website';
+    }
+
+    // Re-render summary to catch language changes
+    if (typeof updateSummary === 'function') {
+      updateSummary();
+    }
   };
 
   applyLang(currentLang);
@@ -714,6 +732,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Global Function for Calculator Handoff
 window.proceedToContact = () => {
+  const currentLang = localStorage.getItem('jgcc_lang') || 'en';
   const serviceEl = document.querySelector('input[name="service-type"]:checked');
   const service = serviceEl ? serviceEl.nextElementSibling.querySelector('.radio-name').textContent : 'Unknown';
   const beds = document.getElementById('bed-count').textContent;
@@ -726,15 +745,28 @@ window.proceedToContact = () => {
 
   const msgBox = document.getElementById('cf-message');
   if (msgBox) {
-    let msg = `[Quote Request Details]\n`;
-    msg += `Service: ${service}\n`;
-    msg += `Size: ${beds} Bed(s), ${baths} Bath(s)\n`;
+    let msg = currentLang === 'ja' ? `【お見積り依頼 選択内容】\n` : `[Quote Request Details]\n`;
+
+    if (currentLang === 'ja') {
+      msg += `ご希望サービス: ${service}\n`;
+      msg += `お部屋の広さ: ${beds} ベッドルーム, ${baths} バスルーム\n`;
+    } else {
+      msg += `Service: ${service}\n`;
+      msg += `Size: ${beds} Bed(s), ${baths} Bath(s)\n`;
+    }
+
     const freqEl = document.getElementById('freq-select');
     const freq = freqEl ? freqEl.options[freqEl.selectedIndex].text : 'N/A';
 
-    msg += `Extras: ${extras.length > 0 ? extras.join(', ') : 'None'}\n`;
-    msg += `Frequency: ${freq}\n\n`;
-    msg += `Please provide any additional details here...`;
+    if (currentLang === 'ja') {
+      msg += `オプション: ${extras.length > 0 ? extras.join(', ') : 'なし'}\n`;
+      msg += `清掃頻度: ${freq}\n\n`;
+      msg += `※その他、お部屋の状況や特に気になる箇所などの詳細をこちらにご記入ください...`;
+    } else {
+      msg += `Extras: ${extras.length > 0 ? extras.join(', ') : 'None'}\n`;
+      msg += `Frequency: ${freq}\n\n`;
+      msg += `Please provide any additional details here...`;
+    }
 
     msgBox.value = msg;
 
