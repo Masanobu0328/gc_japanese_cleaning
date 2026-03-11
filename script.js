@@ -124,111 +124,80 @@ document.addEventListener('DOMContentLoaded', () => {
   // Elements
   const elBedCount = document.getElementById('bed-count');
   const elBathCount = document.getElementById('bath-count');
-  const elBedRate = document.getElementById('bed-rate-label');
-  const elBathRate = document.getElementById('bath-rate-label');
-
-  const bdBase = document.getElementById('bd-base');
-  const bdBeds = document.getElementById('bd-beds');
-  const bdBaths = document.getElementById('bd-baths');
-  const bdExtras = document.getElementById('bd-extras');
-  const bdTotal = document.getElementById('bd-total');
-  const resPrice = document.getElementById('result-price');
+  const bdBaseName = document.getElementById('bd-base-name');
+  const bdRoomsName = document.getElementById('bd-rooms-name');
   const bdExtrasRow = document.getElementById('bd-extras-row');
-
-  // Multipliers
-  let rateBed = 40;
-  let rateBath = 30;
-  let basePrice = 150;
+  const bdExtrasList = document.getElementById('bd-extras-list');
+  const bdFreqName = document.getElementById('bd-freq-name');
+  const freqSelect = document.getElementById('freq-select');
 
   // Counts
   let countBeds = 1;
   let countBaths = 1;
 
-  // Render Prices
-  const calculateTotal = () => {
-    // Get Service Values
+  // Render Summary
+  const updateSummary = () => {
+    // 1. Service Type
     const checkedService = document.querySelector('input[name="service-type"]:checked');
     if (checkedService) {
-      basePrice = parseInt(checkedService.dataset.base);
-      rateBed = parseInt(checkedService.dataset.bed);
-      rateBath = parseInt(checkedService.dataset.bath);
+      const label = checkedService.nextElementSibling.querySelector('.radio-name').textContent;
+      if (bdBaseName) bdBaseName.textContent = label;
     }
 
-    elBedRate.textContent = `+$${rateBed} each`;
-    elBathRate.textContent = `+$${rateBath} each`;
+    // 2. Rooms
+    if (bdRoomsName) {
+      bdRoomsName.textContent = `${countBeds} Bed(s), ${countBaths} Bath(s)`;
+    }
 
-    // Rooms logic
-    // Usually a 1B/1B is covered in base, so extra beds are (count - 1)*rate?
-    // Based on the docs provided: 
-    // "1 Bed / 1 Bath: $150. Extra bed: +$40. Extra bath: +$30"
-    // So if 2Bed/2Bath: $150 + 40 + 30 = $220. 
-    // Which means multiplier is applied strictly on extra rooms beyond the first.
-
-    let extraBeds = Math.max(0, countBeds - 1);
-    let extraBaths = Math.max(0, countBaths - 1);
-
-    let bedCost = extraBeds * rateBed;
-    let bathCost = extraBaths * rateBath;
-
-    // Extras logic
-    let extraCost = 0;
+    // 3. Extras
+    let selectedExtras = [];
     checkboxInputs.forEach(cb => {
       if (cb.checked) {
-        extraCost += parseInt(cb.dataset.price);
+        const labelText = cb.nextElementSibling.querySelector('span[data-i18n]').textContent;
+        selectedExtras.push(labelText);
       }
     });
 
-    // Total
-    let total = basePrice + bedCost + bathCost + extraCost;
-
-    // Update UI
-    resPrice.textContent = total;
-    bdBase.textContent = `$${basePrice}`;
-    bdBeds.textContent = bedCost > 0 ? `+$${bedCost}` : `$0`;
-    bdBaths.textContent = bathCost > 0 ? `+$${bathCost}` : `$0`;
-
-    if (extraCost > 0) {
-      bdExtrasRow.style.display = 'flex';
-      bdExtras.textContent = `+$${extraCost}`;
-    } else {
-      bdExtrasRow.style.display = 'none';
-      bdExtras.textContent = `$0`;
+    if (bdExtrasRow && bdExtrasList) {
+      if (selectedExtras.length > 0) {
+        bdExtrasRow.style.display = 'flex';
+        bdExtrasList.innerHTML = selectedExtras.map(ext => `<li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px; vertical-align:text-bottom;"><polyline points="20 6 9 17 4 12"></polyline></svg>${ext}</li>`).join('');
+      } else {
+        bdExtrasRow.style.display = 'none';
+        bdExtrasList.innerHTML = '';
+      }
     }
 
-    bdTotal.textContent = `$${total}+`;
+    // 4. Frequency
+    if (bdFreqName && freqSelect) {
+      bdFreqName.textContent = freqSelect.options[freqSelect.selectedIndex].text;
+    }
+
+    // Update Language if changed
+    const currentLang = localStorage.getItem('jgcc_lang') || 'en';
+    if (checkedService) {
+      const key = checkedService.nextElementSibling.querySelector('.radio-name').getAttribute('data-i18n');
+      if (translations[currentLang] && translations[currentLang][key]) {
+        if (bdBaseName) bdBaseName.textContent = translations[currentLang][key];
+      }
+    }
   };
+
+  // Bind Frequency
+  if (freqSelect) freqSelect.addEventListener('change', updateSummary);
 
   // Bind Buttons
-  const setupCounter = (btnMinus, btnPlus, labelVal, countRef) => {
-    document.getElementById(btnMinus).addEventListener('click', () => {
-      if (count[countRef] > 1) { count[countRef]--; }
-      document.getElementById(labelVal).textContent = count[countRef];
-      calculateTotal();
-    });
-    document.getElementById(btnPlus).addEventListener('click', () => {
-      if (count[countRef] < 10) { count[countRef]++; }
-      document.getElementById(labelVal).textContent = count[countRef];
-      calculateTotal();
-    });
-  };
-
-  let count = { beds: countBeds, baths: countBaths };
-  setupCounter('bed-minus', 'bed-plus', 'bed-count', 'beds');
-  setupCounter('bath-minus', 'bath-plus', 'bath-count', 'baths');
-
-  // Change mapping logic to update local variables used in calculateTotal
-  document.getElementById('bed-minus').addEventListener('click', () => { if (countBeds > 1) { countBeds--; elBedCount.textContent = countBeds; calculateTotal(); } });
-  document.getElementById('bed-plus').addEventListener('click', () => { if (countBeds < 10) { countBeds++; elBedCount.textContent = countBeds; calculateTotal(); } });
-  document.getElementById('bath-minus').addEventListener('click', () => { if (countBaths > 1) { countBaths--; elBathCount.textContent = countBaths; calculateTotal(); } });
-  document.getElementById('bath-plus').addEventListener('click', () => { if (countBaths < 10) { countBaths++; elBathCount.textContent = countBaths; calculateTotal(); } });
-
+  document.getElementById('bed-minus').addEventListener('click', () => { if (countBeds > 1) { countBeds--; elBedCount.textContent = countBeds; updateSummary(); } });
+  document.getElementById('bed-plus').addEventListener('click', () => { if (countBeds < 10) { countBeds++; elBedCount.textContent = countBeds; updateSummary(); } });
+  document.getElementById('bath-minus').addEventListener('click', () => { if (countBaths > 1) { countBaths--; elBathCount.textContent = countBaths; updateSummary(); } });
+  document.getElementById('bath-plus').addEventListener('click', () => { if (countBaths < 10) { countBaths++; elBathCount.textContent = countBaths; updateSummary(); } });
 
   // Bind Radios & Checkboxes
-  radioInputs.forEach(el => el.addEventListener('change', calculateTotal));
-  checkboxInputs.forEach(el => el.addEventListener('change', calculateTotal));
+  radioInputs.forEach(el => el.addEventListener('change', updateSummary));
+  checkboxInputs.forEach(el => el.addEventListener('change', updateSummary));
 
   // Initial Init
-  calculateTotal();
+  updateSummary();
 
 
   // ==========================================================
@@ -246,10 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Simple validation
       const name = document.getElementById('cf-name').value.trim();
       const email = document.getElementById('cf-email').value.trim();
+      const address = document.getElementById('cf-address').value.trim();
       const msg = document.getElementById('cf-message').value.trim();
 
-      if (!name || !email || !msg) {
-        alert("Please fill in Name, Email and Message.");
+      if (!name || !email || !address || !msg) {
+        alert("Please fill in Name, Email, Address, and Message.");
         return;
       }
 
@@ -287,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
       nav_sub: "Gold Coast, QLD",
       nav_services: "Services",
       nav_results: "Results",
-      nav_calculator: "Estimate",
+      nav_calculator: "Quote",
       nav_contact: "Contact",
       nav_cta: "Get a Quote",
       hero_badge: "Gold Coast Wide — Japanese Standard",
@@ -336,8 +306,8 @@ document.addEventListener('DOMContentLoaded', () => {
       results_desc: "Drag the slider to reveal the before and after. This is the MG clean Solutions standard.",
       before_label: "BEFORE",
       after_label: "AFTER",
-      calc_label: "Instant Estimate",
-      calc_title: "Calculate Your Price",
+      calc_label: "Build Your Quote",
+      calc_title: "Request a Quote",
       calc_desc: "Select your service and property size for an instant estimate. No obligation.",
       calc_step1: "Step 1: Type of Cleaning",
       svc_general: "General Clean",
@@ -363,8 +333,9 @@ document.addEventListener('DOMContentLoaded', () => {
       freq_weekly: "Weekly",
       freq_fortnightly: "Fortnightly",
       freq_monthly: "Monthly",
-      result_heading: "Estimated Price",
-      result_disclaimer: "Starting estimate — final price confirmed on-site.",
+      result_heading: "Your Selection",
+      result_summary_desc: "Review your selected options below. The final price calculation will be provided after you submit your quote request.",
+      result_disclaimer: "Review your selected options below. The final price calculation will be provided after you submit your quote request.",
       breakdown_base: "Base Service",
       breakdown_bedrooms: "Bedrooms",
       breakdown_bathrooms: "Bathrooms",
@@ -541,7 +512,7 @@ document.addEventListener('DOMContentLoaded', () => {
       before_label: "清掃前",
       after_label: "清掃後",
       calc_label: "かんたんシミュレーター",
-      calc_title: "概算お見積り(無料)",
+      calc_title: "お見積りのご依頼",
       calc_desc: "清掃タイプと部屋数を選ぶだけで、その場で概算金額がわかります。",
       calc_step1: "ステップ1: 清掃の種類",
       svc_general: "定期清掃 (General Cleaning)",
@@ -742,27 +713,25 @@ document.addEventListener('DOMContentLoaded', () => {
 // Global Function for Calculator Handoff
 window.proceedToContact = () => {
   const serviceEl = document.querySelector('input[name="service-type"]:checked');
-  const service = serviceEl ? serviceEl.value : 'Unknown';
+  const service = serviceEl ? serviceEl.nextElementSibling.querySelector('.radio-name').textContent : 'Unknown';
   const beds = document.getElementById('bed-count').textContent;
   const baths = document.getElementById('bath-count').textContent;
-  const total = document.getElementById('result-price').textContent;
 
   let extras = [];
   document.querySelectorAll('.extra-item input[type="checkbox"]:checked').forEach(cb => {
-    extras.push(cb.value);
+    extras.push(cb.nextElementSibling.querySelector('span[data-i18n]').textContent);
   });
 
   const msgBox = document.getElementById('cf-message');
   if (msgBox) {
-    let msg = `[Automated Estimate Request]\n`;
+    let msg = `[Quote Request Details]\n`;
     msg += `Service: ${service}\n`;
     msg += `Size: ${beds} Bed(s), ${baths} Bath(s)\n`;
     const freqEl = document.getElementById('freq-select');
     const freq = freqEl ? freqEl.options[freqEl.selectedIndex].text : 'N/A';
 
     msg += `Extras: ${extras.length > 0 ? extras.join(', ') : 'None'}\n`;
-    msg += `Frequency: ${freq}\n`;
-    msg += `Estimated Total: $${total}\n\n`;
+    msg += `Frequency: ${freq}\n\n`;
     msg += `Please provide any additional details here...`;
 
     msgBox.value = msg;
