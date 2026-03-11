@@ -699,7 +699,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (document.getElementById('lang-toggle-mobile')) document.getElementById('lang-toggle-mobile').textContent = "English";
     }
 
-    document.documentElement.lang = lang;
+    // Keep lang="en" always so browser UI (e.g. date picker) stays in English.
+    // We store the current language in a data attribute for CSS/JS use instead.
+    document.documentElement.setAttribute('data-lang', lang);
 
     // Dynamic Form Subject
     const subjectInput = document.querySelector('input[name="_subject"]');
