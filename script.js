@@ -693,7 +693,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalText;
-        alert("Sorry, an error occurred while sending. Please try again or email us directly at contact@mgcleansolutions.com.");
+        alert("Sorry, an error occurred while sending. Please try again or email us directly at mogura312.au@gmail.com.");
       }
     });
   }
