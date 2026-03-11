@@ -550,11 +550,12 @@
           <div class="comparison-slider" id="comparison-slider"
             aria-label="Before and After cleaning comparison. Drag to compare.">
             <!-- After image (base layer) -->
-            <img class="img-after" src="images/after.png" alt="After cleaning — spotless gleaming kitchen" />
+            <img class="img-after" src="images/kitchen-after-1.jpg"
+              alt="After cleaning — spotless kitchen after professional clean" />
 
             <!-- Before image (clipped layer) -->
             <div class="comparison-before-wrap" id="before-wrap">
-              <img id="before-img" src="images/before.png" alt="Before cleaning — dirty kitchen" />
+              <img id="before-img" src="images/kitchen-before-1.jpg" alt="Before cleaning — dirty kitchen" />
             </div>
 
             <!-- Slider handle -->
@@ -574,6 +575,121 @@
             <span class="comparison-label label-before" aria-hidden="true" data-i18n="before_label">BEFORE</span>
             <span class="comparison-label label-after" aria-hidden="true" data-i18n="after_label">AFTER</span>
           </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+     PHOTO GALLERY
+     ============================================================ -->
+    <section class="gallery-section" id="gallery" aria-labelledby="gallery-title"
+      style="padding:5rem 0; background:var(--surface-alt, #f8fbfb);">
+      <div class="container">
+        <div class="text-center reveal">
+          <p class="section-label" data-i18n="gallery_label">Our Work</p>
+          <h2 class="section-title" id="gallery-title" data-i18n="gallery_title">Real Cleaning Results</h2>
+          <p class="section-subtitle" data-i18n="gallery_desc">Every photo is from a real job. This is the MG clean
+            Solutions standard.</p>
+        </div>
+
+        <div class="gallery-grid reveal reveal-delay-1"
+          style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.25rem; margin-top:3rem;">
+
+          <!-- Kitchen Oven Before / After -->
+          <div class="gallery-card"
+            style="grid-column:span 2; position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <div class="comparison-slider" id="gallery-slider-oven" aria-label="Oven before and after comparison"
+              style="border-radius:var(--radius-lg,12px); overflow:hidden;">
+              <img class="img-after" src="images/oven-after.jpg" alt="Oven after deep clean"
+                style="width:100%;display:block;" />
+              <div class="comparison-before-wrap" id="oven-before-wrap" style="width:50%;">
+                <img id="oven-before-img" src="images/oven-before.jpg" alt="Oven before clean"
+                  style="width:100%;display:block;" />
+              </div>
+              <div class="comparison-handle" id="oven-slider-handle" role="slider"
+                aria-label="Drag to compare oven before and after" aria-valuemin="0" aria-valuemax="100"
+                aria-valuenow="50" tabindex="0">
+                <div class="comparison-handle-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                    <polyline points="9 18 3 12 9 6" transform="translate(9,0) scale(-1,1)" />
+                  </svg>
+                </div>
+              </div>
+              <span class="comparison-label label-before" aria-hidden="true" data-i18n="before_label">BEFORE</span>
+              <span class="comparison-label label-after" aria-hidden="true" data-i18n="after_label">AFTER</span>
+            </div>
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_oven">Oven Deep Clean</div>
+          </div>
+
+          <!-- Gallery Photos -->
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/sink.jpg" alt="Sparkling clean sink after professional cleaning"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_sink">Sink</div>
+          </div>
+
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/bathroom.jpg" alt="Spotless bathroom after cleaning"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_bath">Bathroom</div>
+          </div>
+
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/vanity.jpg" alt="Clean vanity and mirror"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_vanity">Vanity</div>
+          </div>
+
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/toilet.jpg" alt="Sanitised toilet after deep cleaning"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_toilet">Toilet</div>
+          </div>
+
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/aircon.jpg" alt="Clean air conditioning unit"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_aircon">Air Conditioning</div>
+          </div>
+
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/window.jpg" alt="Crystal clear windows after cleaning"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_window">Windows</div>
+          </div>
+
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/airbnb-1.jpg" alt="Clean Airbnb property ready for guests"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_airbnb">Airbnb Turnover</div>
+          </div>
+
+          <div class="gallery-card"
+            style="position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
+            <img src="images/kitchen-after-2.jpg" alt="Clean kitchen cupboards after deep cleaning"
+              style="width:100%;height:250px;object-fit:cover;display:block;" loading="lazy" />
+            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
+              data-i18n="gallery_kitchen">Kitchen</div>
+          </div>
+
         </div>
       </div>
     </section>

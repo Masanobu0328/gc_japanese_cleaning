@@ -61,6 +61,18 @@ document.addEventListener('DOMContentLoaded', () => {
       results_desc: "Drag the slider to reveal the before and after. This is the MG clean Solutions standard.",
       before_label: "BEFORE",
       after_label: "AFTER",
+      gallery_label: "Our Work",
+      gallery_title: "Real Cleaning Results",
+      gallery_desc: "Every photo is from a real job. This is the MG clean Solutions standard.",
+      gallery_oven: "Oven Deep Clean",
+      gallery_sink: "Sink",
+      gallery_bath: "Bathroom",
+      gallery_vanity: "Vanity / Washbasin",
+      gallery_toilet: "Toilet",
+      gallery_aircon: "Air Conditioning",
+      gallery_window: "Windows",
+      gallery_airbnb: "Airbnb Turnover",
+      gallery_kitchen: "Kitchen",
       calc_label: "Build Your Quote",
       calc_title: "Request a Quote",
       calc_desc: "Select your service and property size for an instant estimate. No obligation.",
@@ -268,6 +280,18 @@ document.addEventListener('DOMContentLoaded', () => {
       results_desc: "真ん中のバーを左右にスワイプして、圧倒的な違いを体感してください。",
       before_label: "清掃前",
       after_label: "清掃後",
+      gallery_label: "清掃実績",
+      gallery_title: "本物の清掃クオリティ",
+      gallery_desc: "すべて実際の施工写真です。これが MG clean Solutions のスタンダードです。",
+      gallery_oven: "オーブン清掃",
+      gallery_sink: "シンク",
+      gallery_bath: "バスルーム",
+      gallery_vanity: "洗面所",
+      gallery_toilet: "トイレ",
+      gallery_aircon: "エアコン",
+      gallery_window: "窓",
+      gallery_airbnb: "民泊清掃",
+      gallery_kitchen: "キッチン",
       calc_label: "かんたんシミュレーター",
       calc_title: "お見積りのご依頼",
       calc_desc: "清掃タイプと部屋数を選ぶだけで、その場で概算金額がわかります。",
@@ -470,17 +494,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================
-  // 4. BEFORE / AFTER SLIDER
+  // 4. BEFORE / AFTER SLIDERS (main + gallery)
   // ==========================================================
-  const slider = document.getElementById('comparison-slider');
-  if (slider) {
-    const handle = document.getElementById('slider-handle');
-    const beforeWrap = document.getElementById('before-wrap');
-    const beforeImg = document.getElementById('before-img');
+  const initSlider = (sliderId, handleId, beforeWrapId, beforeImgId) => {
+    const slider = document.getElementById(sliderId);
+    if (!slider) return;
+    const handle = document.getElementById(handleId);
+    const beforeWrap = document.getElementById(beforeWrapId);
+    const beforeImg = document.getElementById(beforeImgId);
 
-    // Maintain inner image size
     const updateSize = () => {
-      beforeImg.style.width = `${slider.offsetWidth}px`;
+      if (beforeImg) beforeImg.style.width = `${slider.offsetWidth}px`;
     };
     window.addEventListener('resize', updateSize);
     updateSize();
@@ -488,7 +512,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let isSliding = false;
     const startSlide = (e) => { isSliding = true; e.preventDefault(); };
     const stopSlide = () => { isSliding = false; };
-
     const moveSlide = (e) => {
       if (!isSliding) return;
       const rect = slider.getBoundingClientRect();
@@ -496,7 +519,6 @@ document.addEventListener('DOMContentLoaded', () => {
       let pos = (x / rect.width) * 100;
       if (pos < 0) pos = 0;
       if (pos > 100) pos = 100;
-
       handle.style.left = `${pos}%`;
       beforeWrap.style.width = `${pos}%`;
     };
@@ -504,11 +526,15 @@ document.addEventListener('DOMContentLoaded', () => {
     handle.addEventListener('mousedown', startSlide);
     window.addEventListener('mouseup', stopSlide);
     window.addEventListener('mousemove', moveSlide);
-
     handle.addEventListener('touchstart', startSlide, { passive: false });
     window.addEventListener('touchend', stopSlide);
     window.addEventListener('touchmove', moveSlide, { passive: false });
-  }
+  };
+
+  // Kitchen slider (main)
+  initSlider('comparison-slider', 'slider-handle', 'before-wrap', 'before-img');
+  // Oven slider (gallery)
+  initSlider('gallery-slider-oven', 'oven-slider-handle', 'oven-before-wrap', 'oven-before-img');
 
 
   // ==========================================================
