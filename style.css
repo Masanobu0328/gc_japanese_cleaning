@@ -1815,3 +1815,11 @@ button {
 .hidden {
   display: none;
 }
+/* Language Toggle Mobile Fix */
+.lang-toggle, .lang-toggle-mobile {
+  white-space: nowrap !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
+}
