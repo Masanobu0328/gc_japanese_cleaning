@@ -546,19 +546,17 @@
             the MG clean Solutions standard.</p>
         </div>
 
+        <!-- Kitchen -->
         <div class="comparison-wrap reveal reveal-delay-1">
+          <p style="text-align:center;font-weight:700;font-size:1.05rem;margin-bottom:1rem;color:var(--text-light);"
+            data-i18n="gallery_kitchen">Kitchen</p>
           <div class="comparison-slider" id="comparison-slider"
             aria-label="Before and After cleaning comparison. Drag to compare.">
-            <!-- After image (base layer) -->
             <img class="img-after" src="images/kitchen-after-1.jpg"
               alt="After cleaning — spotless kitchen after professional clean" />
-
-            <!-- Before image (clipped layer) -->
             <div class="comparison-before-wrap" id="before-wrap">
               <img id="before-img" src="images/kitchen-before-1.jpg" alt="Before cleaning — dirty kitchen" />
             </div>
-
-            <!-- Slider handle -->
             <div class="comparison-handle" id="slider-handle" role="slider"
               aria-label="Drag to compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"
               tabindex="0">
@@ -570,8 +568,31 @@
                 </svg>
               </div>
             </div>
+            <span class="comparison-label label-before" aria-hidden="true" data-i18n="before_label">BEFORE</span>
+            <span class="comparison-label label-after" aria-hidden="true" data-i18n="after_label">AFTER</span>
+          </div>
+        </div>
 
-            <!-- Labels -->
+        <!-- Oven -->
+        <div class="comparison-wrap reveal reveal-delay-2" style="margin-top:3rem;">
+          <p style="text-align:center;font-weight:700;font-size:1.05rem;margin-bottom:1rem;color:var(--text-light);"
+            data-i18n="gallery_oven">Oven Deep Clean</p>
+          <div class="comparison-slider" id="gallery-slider-oven" aria-label="Oven before and after comparison">
+            <img class="img-after" src="images/oven-after.jpg" alt="Oven after deep clean" />
+            <div class="comparison-before-wrap" id="oven-before-wrap" style="width:50%;">
+              <img id="oven-before-img" src="images/oven-before.jpg" alt="Oven before clean" />
+            </div>
+            <div class="comparison-handle" id="oven-slider-handle" role="slider"
+              aria-label="Drag to compare oven before and after" aria-valuemin="0" aria-valuemax="100"
+              aria-valuenow="50" tabindex="0">
+              <div class="comparison-handle-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6" />
+                  <polyline points="9 18 3 12 9 6" transform="translate(9,0) scale(-1,1)" />
+                </svg>
+              </div>
+            </div>
             <span class="comparison-label label-before" aria-hidden="true" data-i18n="before_label">BEFORE</span>
             <span class="comparison-label label-after" aria-hidden="true" data-i18n="after_label">AFTER</span>
           </div>
@@ -593,37 +614,7 @@
             Solutions standard.</p>
         </div>
 
-        <div class="gallery-grid reveal reveal-delay-1"
-          style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1.25rem; margin-top:3rem;">
-
-          <!-- Kitchen Oven Before / After -->
-          <div class="gallery-card"
-            style="grid-column:span 2; position:relative; overflow:hidden; border-radius:var(--radius-lg,12px); box-shadow:0 4px 24px rgba(0,0,0,.12);">
-            <div class="comparison-slider" id="gallery-slider-oven" aria-label="Oven before and after comparison"
-              style="border-radius:var(--radius-lg,12px); overflow:hidden;">
-              <img class="img-after" src="images/oven-after.jpg" alt="Oven after deep clean"
-                style="width:100%;display:block;" />
-              <div class="comparison-before-wrap" id="oven-before-wrap" style="width:50%;">
-                <img id="oven-before-img" src="images/oven-before.jpg" alt="Oven before clean"
-                  style="width:100%;display:block;" />
-              </div>
-              <div class="comparison-handle" id="oven-slider-handle" role="slider"
-                aria-label="Drag to compare oven before and after" aria-valuemin="0" aria-valuemax="100"
-                aria-valuenow="50" tabindex="0">
-                <div class="comparison-handle-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polyline points="15 18 9 12 15 6" />
-                    <polyline points="9 18 3 12 9 6" transform="translate(9,0) scale(-1,1)" />
-                  </svg>
-                </div>
-              </div>
-              <span class="comparison-label label-before" aria-hidden="true" data-i18n="before_label">BEFORE</span>
-              <span class="comparison-label label-after" aria-hidden="true" data-i18n="after_label">AFTER</span>
-            </div>
-            <div style="text-align:center;padding:.75rem;font-weight:600;font-size:.9rem;color:var(--text-light);"
-              data-i18n="gallery_oven">Oven Deep Clean</div>
-          </div>
+        <div class="gallery-grid reveal reveal-delay-1">
 
           <!-- Gallery Photos -->
           <div class="gallery-card"
